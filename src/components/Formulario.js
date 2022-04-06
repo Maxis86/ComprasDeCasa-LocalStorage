@@ -10,6 +10,7 @@ const Formulario = ({ crearProducto }) => {
     nombre: "",
     precio: "",
     cantidad: "1",
+    tachar: false,
     id: "",
   });
 
@@ -24,7 +25,7 @@ const Formulario = ({ crearProducto }) => {
   };
 
   //Extraer los valores
-  const { nombre, precio, cantidad } = nuevoProducto;
+  const { nombre, cantidad } = nuevoProducto;
 
   // Cuando el usuario presiona agregar producto
   const submitProducto = (e) => {
@@ -35,11 +36,6 @@ const Formulario = ({ crearProducto }) => {
       actualizarError(true);
       return;
     }
-
-    // if(precio < 1 || isNaN (precio) ){
-    //     actualizarError(true);
-    //     return;
-    // }
 
     //Asignar un ID
     nuevoProducto.id = uuidv4();
@@ -74,9 +70,9 @@ const Formulario = ({ crearProducto }) => {
         Agregar producto
       </h2>
 
-      <div>
-        <Form>
-          <Form.Group className="mb-3">
+      <div >
+        <Form onSubmit={submitProducto} >
+          <Form.Group className="mb-3 ">
             <Form.Label style={{ color: "#F5F5F5" }}>Producto</Form.Label>
 
             <Form.Control
@@ -86,23 +82,25 @@ const Formulario = ({ crearProducto }) => {
               placeholder="Ingrese el nombre del producto"
               onChange={actualizarState}
               value={nombre}
+              autoComplete="off"
             />
           </Form.Group>
 
           <Form.Group as={Col} className="mb-3" style={{ color: "#F5F5F5" }}>
             <Form.Label>Cantidad</Form.Label>
             <Row>
-              <Col sm={5} xs={2}>
+              <Col sm={5} xs={4}>
                 <Form.Control
                   type="number"
                   name="cantidad"
                   placeholder="0"
                   onChange={actualizarState}
                   value={cantidad}
+                  
                 />
               </Col>
-              <Col>
-                <Button variant="primary" type="submit" className="mb-3">
+              <Col style={{marginLeft:'100px'}} >
+                <Button variant="outline-info" type="submit" className="mb-3">
                   Agregar
                 </Button>
               </Col>
