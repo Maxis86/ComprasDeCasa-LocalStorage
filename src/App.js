@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
 import Formulario from "./components/Formulario";
 import Producto from "./components/Producto";
-
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 function App() {
   //Citas en local storage
@@ -15,6 +12,7 @@ function App() {
   }
 
   //Arreglo de productos
+
   const [productos, guardarProductos] = useState(productosIniciales);
 
   useEffect(() => {
@@ -24,6 +22,20 @@ function App() {
       localStorage.setItem("productos", JSON.stringify([]));
     }
   }, [productos, productosIniciales]);
+
+  console.log(productosIniciales.sort());
+  function SortArray(x, y) {
+    if (x.nombre < y.nombre) {
+      return -1;
+    }
+    if (x.nombre > y.nombre) {
+      return 1;
+    }
+    return 0;
+  }
+  
+  productosIniciales.sort(SortArray);
+ 
 
   // Funcion que tome los productos actuales y agregue el nuevo
   const crearProducto = (producto) => {
@@ -78,7 +90,16 @@ function App() {
               <Formulario crearProducto={crearProducto} />
             </div>
           </Col>
-
+          <hr
+            style={{
+              color: "#E2D784",
+              fontFamily: "Grape Nuts",
+              fontSize: "40px",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          />
           <Col xs={12} md={6}>
             <div>
               <h2
@@ -93,28 +114,132 @@ function App() {
               >
                 {titulo}
               </h2>
-              {productos.map((producto,id) => (
-                <div>
-                  <Producto
-                    key={id}
-                    producto={producto}
-                    eliminar={eliminar}
-                    sumarCantidad={sumarCantidad}
-                    restarCantidad={restarCantidad}
-                    tachar={tachar}
-                  />
-                </div>
-              ))}
+
+              <p
+                style={{
+                  color: "#F1EEE9",
+                  fontFamily: "Grape Nuts",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                  marginTop: 15,
+                }}
+              >
+                Cocina
+              </p>
+
+              {productos.map((producto, id) =>
+                producto.categoria === "Cocina" ? (
+                  <div>
+                    <Producto
+                      key={id}
+                      producto={producto}
+                      eliminar={eliminar}
+                      sumarCantidad={sumarCantidad}
+                      restarCantidad={restarCantidad}
+                      tachar={tachar}
+                    />
+                  </div>
+                ) : null
+              )}
+
+              <p
+                style={{
+                  color: "#F1EEE9",
+                  fontFamily: "Grape Nuts",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                  marginTop: 15,
+                }}
+              >
+                Baño
+              </p>
+
+              {productos.map((producto, id) =>
+                producto.categoria === "Baño" ? (
+                  <div>
+                    <Producto
+                      key={id}
+                      producto={producto}
+                      eliminar={eliminar}
+                      sumarCantidad={sumarCantidad}
+                      restarCantidad={restarCantidad}
+                      tachar={tachar}
+                    />
+                  </div>
+                ) : null
+              )}
+              <p
+                style={{
+                  color: "#F1EEE9",
+                  fontFamily: "Grape Nuts",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                  marginTop: 15,
+                }}
+              >
+                Frío
+              </p>
+
+              {productos.map((producto, id) =>
+                producto.categoria === "Frio" ? (
+                  <div>
+                    <Producto
+                      key={id}
+                      producto={producto}
+                      eliminar={eliminar}
+                      sumarCantidad={sumarCantidad}
+                      restarCantidad={restarCantidad}
+                      tachar={tachar}
+                    />
+                  </div>
+                ) : null
+              )}
+
+              <p
+                style={{
+                  color: "#F1EEE9",
+                  fontFamily: "Grape Nuts",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                  marginTop: 15,
+                }}
+              >
+                Verdulería
+              </p>
+
+              {productos.map((producto, id) =>
+                producto.categoria === "Verduleria" ? (
+                  <div>
+                    <Producto
+                      key={id}
+                      producto={producto}
+                      eliminar={eliminar}
+                      sumarCantidad={sumarCantidad}
+                      restarCantidad={restarCantidad}
+                      tachar={tachar}
+                    />
+                  </div>
+                ) : null
+              )}
             </div>
           </Col>
         </Row>
       </Container>
+
       <footer className="footer bg-light">
         <div
           className=" text-center py-3"
           style={{ backgroundColor: "#EEEEEE", marginTop: "100px" }}
         >
-          © 2022 Copyright: maximilianochamarro@gmail.com V01
+          © 2022 Copyright: maximilianochamarro@gmail.com V01.3
         </div>
       </footer>
     </>

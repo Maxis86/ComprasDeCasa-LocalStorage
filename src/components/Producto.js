@@ -42,7 +42,7 @@ const Producto = ({
               <span 
                 style={{
                   textDecoration:'line-through',
-                  color: "#F5F5F5",
+                  color: "#FF4949",
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "center",
