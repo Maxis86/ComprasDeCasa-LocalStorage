@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import Form from "react-bootstrap/Form";
 import { Button, Col, Row } from "react-bootstrap";
 import { ButtonGroup, ToggleButton } from "react-bootstrap";
 import { useEffect } from "react";
+import ProductoContext from "../context/producto.js/productoContext";
 
-const Formulario = ({ crearProducto }) => {
+const Formulario = () => {
+  const productoContext = useContext(ProductoContext);
+  const { crearProducto, obtenerProductos } = productoContext;
+
   // Crear State de Citas
   const [nuevoProducto, actualizarProducto] = useState({
     nombre: "",
-    precio: "",
+    precio: "0",
     cantidad: "1",
     tachar: true,
     categoria: "Cocina",
@@ -20,10 +24,10 @@ const Formulario = ({ crearProducto }) => {
   const [radioValue, setRadioValue] = useState("Cocina");
 
   const radios = [
-    { name: "Cocina", value: "Cocina" },
-    { name: "Baño", value: "Baño" },
-    { name: "Frio", value: "Frio" },
-    { name: "Verduleria", value: "Verduleria" },
+    { name: "Agus", value: "Cocina" },
+    { name: "Mamá", value: "Baño" },
+    { name: "Papá", value: "Frio" },
+    { name: "Otro", value: "Verduleria" },
   ];
 
   const [error, actualizarError] = useState(false);
@@ -52,7 +56,7 @@ const Formulario = ({ crearProducto }) => {
   };
 
   //Extraer los valores
-  const { nombre, cantidad } = nuevoProducto;
+  const { nombre, cantidad, precio } = nuevoProducto;
 
   // Cuando el usuario presiona agregar producto
   const submitProducto = (e) => {
@@ -66,20 +70,19 @@ const Formulario = ({ crearProducto }) => {
       return;
     }
 
-    //Asignar un ID
-    nuevoProducto.id = uuidv4();
-
     //Eliminar mensaje de error
     actualizarError(false);
 
     //Crear el producto
     crearProducto(nuevoProducto);
 
+    obtenerProductos();
     //Reiniciar el form
     actualizarProducto({
       nombre: "",
       precio: "",
       cantidad: "1",
+      precio: "0",
       tachar: true,
       categoria: radioValue,
       id: "",
@@ -98,7 +101,7 @@ const Formulario = ({ crearProducto }) => {
           justifyContent: "center",
         }}
       >
-        Agregar producto
+        Mi Lista, Agustín
       </h2>
 
       <div>
@@ -118,11 +121,12 @@ const Formulario = ({ crearProducto }) => {
           </Form.Group>
 
           <Form.Group as={Col} className="mb-3" style={{ color: "#F5F5F5" }}>
-            <Form.Label>Cantidad</Form.Label>
             <Row>
+              {/* <Form.Label>Cantidad</Form.Label> */}
               <Col
-                sm={4}
-                xs={4}
+                sm={6}
+                xs={6}
+                className="mr-3"
                 style={{
                   color: "#E2D784",
                   fontSize: "20px",
@@ -131,12 +135,39 @@ const Formulario = ({ crearProducto }) => {
                   justifyContent: "center",
                 }}
               >
+                <Form.Label style={{ color: "#F5F5F5", marginRight: "6px", fontSize: "16px" }}>
+                  Cantidad
+                </Form.Label>
                 <Form.Control
                   type="number"
                   name="cantidad"
                   placeholder="0"
                   onChange={actualizarState}
                   value={cantidad}
+                />
+              </Col>
+
+              {/* <Form.Label>Precio</Form.Label> */}
+              <Col
+                sm={6}
+                xs={6}
+                style={{
+                  color: "#E2D784",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Form.Label style={{ color: "#F5F5F5", marginRight: "6px", fontSize: "16px" }}>
+                  Precio
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  name="precio"
+                  placeholder="0"
+                  onChange={actualizarState}
+                  value={precio}
                 />
               </Col>
             </Row>
@@ -152,11 +183,9 @@ const Formulario = ({ crearProducto }) => {
                 justifyContent: "center",
               }}
             >
-              
               <ButtonGroup
                 style={{
                   marginTop: 0,
-                  
                 }}
               >
                 {radios.map((radio, idx) => (

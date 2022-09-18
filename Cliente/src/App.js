@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 import Formulario from "./components/Formulario";
 import Producto from "./components/Producto";
+import ProductoContext from "./context/producto.js/productoContext";
 
 function App() {
-  //Citas en local storage
-  let productosIniciales = JSON.parse(localStorage.getItem("productos"));
-  if (!productosIniciales) {
-    productosIniciales = [];
-  }
 
-  //Arreglo de productos
-
-  const [productos, guardarProductos] = useState(productosIniciales);
+  const productoContext = useContext(ProductoContext);
+  const { productos, obtenerProductos } = productoContext;
 
   useEffect(() => {
-    if (productosIniciales) {
-      localStorage.setItem("productos", JSON.stringify(productos));
-    } else {
-      localStorage.setItem("productos", JSON.stringify([]));
-    }
-  }, [productos, productosIniciales]);
+    obtenerProductos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  console.log(productosIniciales.sort());
+  }, []);
+
+  // console.log(productosIniciales.sort());
   function SortArray(x, y) {
     if (x.nombre < y.nombre) {
       return -1;
@@ -33,53 +26,20 @@ function App() {
     }
     return 0;
   }
-  
-  productosIniciales.sort(SortArray);
- 
 
-  // Funcion que tome los productos actuales y agregue el nuevo
-  const crearProducto = (producto) => {
-    guardarProductos([...productos, producto]);
-  };
-
-  //Funcion que elimina un producto con su id
-  const eliminar = (id) => {
-    const nuevosProductos = productos.filter((producto) => producto.id !== id);
-    guardarProductos(nuevosProductos);
-  };
 
   const tachar = (id) => {
-    productos.map(
-      (producto) => producto.id === id && (producto.tachar = !producto.tachar)
-    );
-
-    const pepe = Array.from(productos);
-    guardarProductos(pepe);
+    // productos.map(
+    //   (producto) => producto.id === id && (producto.tachar = !producto.tachar)
+    // );
+    // const pepe = Array.from(productos);
+    // guardarProductos(pepe);
   };
 
-  const sumarCantidad = (id) => {
-    productos.map(
-      (producto) =>
-        producto.id === id &&
-        (producto.cantidad = parseInt(producto.cantidad) + 1)
-    );
 
-    const pepe = Array.from(productos);
-    guardarProductos(pepe);
-  };
-
-  const restarCantidad = (id) => {
-    productos.map(
-      (producto) =>
-        producto.id === id &&
-        (producto.cantidad = parseInt(producto.cantidad) - 1)
-    );
-    const pepe = Array.from(productos);
-    guardarProductos(pepe);
-  };
 
   // Mensaje Condicional
-  const titulo = productos.length === 0 ? "No hay Productos" : "Próxima Compra";
+  // const titulo = productos.length === 0 ? "No hay Productos" : "Próxima Compra";
 
   return (
     <>
@@ -87,7 +47,7 @@ function App() {
         <Row>
           <Col xs={12} md={6}>
             <div>
-              <Formulario crearProducto={crearProducto} />
+              <Formulario />
             </div>
           </Col>
           <hr
@@ -112,33 +72,28 @@ function App() {
                   justifyContent: "center",
                 }}
               >
-                {titulo}
+                {/* {titulo} */}
               </h2>
 
               <p
                 style={{
                   color: "#F1EEE9",
                   fontFamily: "Grape Nuts",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "center",
                   marginTop: 15,
                 }}
               >
-                Cocina
+                Bolso Agus
               </p>
-
-              {productos.map((producto, id) =>
-                producto.categoria === "Cocina" ? (
+              {productos && productos.map((producto, id) =>
+                producto.categoria.nombre === "COCINA" ? (
                   <div>
                     <Producto
                       key={id}
                       producto={producto}
-                      eliminar={eliminar}
-                      sumarCantidad={sumarCantidad}
-                      restarCantidad={restarCantidad}
-                      tachar={tachar}
                     />
                   </div>
                 ) : null
@@ -148,54 +103,48 @@ function App() {
                 style={{
                   color: "#F1EEE9",
                   fontFamily: "Grape Nuts",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "center",
                   marginTop: 15,
                 }}
               >
-                Baño
+                Bolso mamá
               </p>
-
-              {productos.map((producto, id) =>
-                producto.categoria === "Baño" ? (
-                  <div>
-                    <Producto
-                      key={id}
-                      producto={producto}
-                      eliminar={eliminar}
-                      sumarCantidad={sumarCantidad}
-                      restarCantidad={restarCantidad}
-                      tachar={tachar}
-                    />
-                  </div>
-                ) : null
-              )}
+              {productos !== []
+                ? productos.map((producto, id) =>
+                    producto.categoria.nombre === "BANO" ? (
+                      <div>
+                        <Producto
+                          key={id}
+                          producto={producto}
+                        />
+                      </div>
+                    ) : null
+                  )
+                : null}
               <p
                 style={{
                   color: "#F1EEE9",
                   fontFamily: "Grape Nuts",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "center",
                   marginTop: 15,
                 }}
               >
-                Frío
+                Bolso papá
               </p>
 
-              {productos.map((producto, id) =>
-                producto.categoria === "Frio" ? (
+              {productos && productos.map((producto, id) =>
+                producto.categoria.nombre === "FRIO" ? (
                   <div>
                     <Producto
                       key={id}
                       producto={producto}
-                      eliminar={eliminar}
-                      sumarCantidad={sumarCantidad}
-                      restarCantidad={restarCantidad}
-                      tachar={tachar}
+
                     />
                   </div>
                 ) : null
@@ -205,26 +154,22 @@ function App() {
                 style={{
                   color: "#F1EEE9",
                   fontFamily: "Grape Nuts",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "center",
                   marginTop: 15,
                 }}
               >
-                Verdulería
+                Otros
               </p>
 
-              {productos.map((producto, id) =>
-                producto.categoria === "Verduleria" ? (
+              {productos && productos.map((producto, id) =>
+                producto.categoria.nombre === "VERDULERIA" ? (
                   <div>
                     <Producto
                       key={id}
                       producto={producto}
-                      eliminar={eliminar}
-                      sumarCantidad={sumarCantidad}
-                      restarCantidad={restarCantidad}
-                      tachar={tachar}
                     />
                   </div>
                 ) : null
@@ -239,7 +184,7 @@ function App() {
           className=" text-center py-3"
           style={{ backgroundColor: "#EEEEEE", marginTop: "100px" }}
         >
-          © 2022 Copyright: maximilianochamarro@gmail.com V01.3
+          © 2022 Copyright: maximilianochamarro@gmail.com V02.0
         </div>
       </footer>
     </>
